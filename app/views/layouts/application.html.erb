@@ -13,6 +13,11 @@
         <%= yield %>
       </section>
       <%= render 'layouts/footer' %>
+      <% if Rails.env.development? %>
+      <font color="white">
+        <%= debug(params) %>
+      </font>
+      <% end %>
     </div>
   </body>
 </html>
