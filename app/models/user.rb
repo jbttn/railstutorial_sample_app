@@ -19,6 +19,9 @@ class User < ActiveRecord::Base
   # Set which fields should be accessible by the user
   attr_accessible :name, :email, :password, :password_confirmation
   
+  # Assoc & Ensuring that a user’s microposts are destroyed along with the user
+  has_many :microposts, :dependent => :destroy
+  
   email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   
   validates :name,  :presence => true,
@@ -35,6 +38,10 @@ class User < ActiveRecord::Base
   # check if the password in the database maches what is passed in
   def has_password?(submitted_password)
     encrypted_password == encrypt(submitted_password)
+  end
+  
+  def feed
+    Micropost.where("user_id = ?", id)
   end
   
   # Defining a class method. Other syntax as follows:
